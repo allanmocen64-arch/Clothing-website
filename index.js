@@ -272,7 +272,7 @@ function showDetail(id) {
         <div class="main-img" id="main-img">${imgHTML}</div>
       </div>
       <div class="detail-info">
-        <div class="detail-brand">priestDownTown</div>
+        <div class="detail-brand">Aether Lab</div>
         <h1 class="detail-name">${p.name}</h1>
         <div class="detail-rating">
           <span class="stars">★★★★★</span>
@@ -451,7 +451,7 @@ function openCheckout() {
 
   
   const msg = encodeURIComponent(
-    `Hi priestDownTown! I'd like to order:\n` +
+    `Hi Aether Lab! I'd like to order:\n` +
     lines.map(l => `• ${l}`).join('\n') +
     `\n\nTotal: ${fmt(total)}`
   );

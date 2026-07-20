@@ -1,178 +1,187 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aether Lab | Modern Clothing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="index.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Priestdowntown | Modern Clothing</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <nav>
+      <a class="logo" onclick="showPage('landing')">Priestdowntown</a>
+      <ul class="nav-links">
+        <li><a onclick="showPage('landing')">Home</a></li>
+        <li><a onclick="showPage('shop')">Shop</a></li>
+        <li><a>Collections</a></li>
+        <li><a>About</a></li>
+      </ul>
+      <button class="cart-btn" onclick="toggleCart()">
+        Bag <span class="cart-count" id="cart-count">0</span>
+      </button>
+    </nav>
 
-<nav>
-  <a class="logo" onclick="showPage('landing')">Aether Lab</a>
-  <ul class="nav-links">
-    <li><a onclick="showPage('landing')">Home</a></li>
-    <li><a onclick="showPage('shop')">Shop</a></li>
-    <li><a>Collections</a></li>
-    <li><a>About</a></li>
-  </ul>
-  <button class="cart-btn" onclick="toggleCart()">
-    Bag <span class="cart-count" id="cart-count">0</span>
-  </button>
-</nav>
+    <div class="page active" id="page-landing">
+      <section class="hero">
+        <div class="hero-left">
+          <p class="eyebrow">New Arrivals 2025</p>
+          <h1 class="hero-title">
+            Dress <em>for</em><br />the moment<br />you <em>want.</em>
+          </h1>
+          <p class="hero-sub">
+            Clothing that bridges intention and identity. Minimal, considered,
+            and built to last.
+          </p>
+          <div class="hero-btns">
+            <button class="btn-primary" onclick="showPage('shop')">
+              Shop Now
+            </button>
+            <button class="btn-outline">View Lookbook</button>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="hero-right-placeholder" id="hero-img-wrap">V</div>
+          <div class="hero-right-text">
+            <span class="hrt-label">The New Drop</span>
+            <div class="hrt-headline">
+              Style that<br />speaks <em>before</em><br />you do.
+            </div>
+            <p class="hrt-sub">Fresh fits. Real looks. Priestdowntown.</p>
+          </div>
+          <div class="hero-badge">
+            <div class="hero-badge-label">Items in collection</div>
+            <div class="hero-badge-value" id="hero-count">—</div>
+          </div>
+        </div>
+      </section>
 
+      <div class="marquee">
+        <div class="marquee-inner">
+          <span>Free shipping over $150</span><span>·</span>
+          <span>Sustainable materials</span><span>·</span>
+          <span>Returns within 30 days</span><span>·</span>
+          <span>New arrivals every week</span><span>·</span>
+          <span>Free shipping over $150</span><span>·</span>
+          <span>Sustainable materials</span><span>·</span>
+          <span>Returns within 30 days</span><span>·</span>
+          <span>New arrivals every week</span><span>·</span>
+        </div>
+      </div>
 
-<div class="page active" id="page-landing">
+      <section class="section-wrap">
+        <div class="section-header">
+          <h2 class="section-title">Shop by Category</h2>
+          <a class="section-link" onclick="showPage('shop')">View all </a>
+        </div>
+        <div class="cat-grid" id="cat-grid">
+          <div class="loading">Loading categories</div>
+        </div>
+      </section>
 
-  <section class="hero">
-    <div class="hero-left">
-      <p class="eyebrow">New Arrivals  2025</p>
-      <h1 class="hero-title">Dress <em>for</em><br>the moment<br>you <em>want.</em></h1>
-      <p class="hero-sub">Clothing that bridges intention and identity. Minimal, considered, and built to last.</p>
-      <div class="hero-btns">
-        <button class="btn-primary" onclick="showPage('shop')">Shop Now </button>
-        <button class="btn-outline">View Lookbook</button>
+      <section class="section-wrap" style="padding-top: 0">
+        <div class="section-header" style="padding-top: 80px">
+          <h2 class="section-title">Featured Pieces</h2>
+          <a class="section-link" onclick="showPage('shop')">All products</a>
+        </div>
+        <div class="product-grid" id="featured-grid">
+          <div class="loading">Loading products</div>
+        </div>
+      </section>
+
+      <footer>
+        <div class="footer-grid">
+          <div>
+            <div class="footer-brand">Priestdowntown</div>
+            <p class="footer-tagline">
+              Clothing made with care, cut with intention. We design for real
+              life, not the runway.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Shop</h4>
+            <ul>
+              <li><a onclick="showPage('shop')">All Products</a></li>
+              <li><a>New Arrivals</a></li>
+              <li><a>Sale</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <ul>
+              <li><a>Sizing Guide</a></li>
+              <li><a>Shipping Info</a></li>
+              <li><a>Returns</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Company</h4>
+            <ul>
+              <li><a>About Us</a></li>
+              <li><a>Sustainability</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2025 Priestdowntown. All rights reserved.</span>
+          <span>Privacy · Terms</span>
+        </div>
+      </footer>
+    </div>
+
+    <div class="page" id="page-shop">
+      <div class="shop-page">
+        <div class="shop-banner">
+          <h1>All Products</h1>
+          <p id="shop-count">Loading</p>
+        </div>
+        <div class="shop-controls">
+          <div class="filter-tabs" id="filter-tabs">
+            <button class="ftab active" onclick="applyFilter('All', this)">
+              All
+            </button>
+          </div>
+          <select class="sort-sel" onchange="applySort(this.value)">
+            <option value="default">Sort: Featured</option>
+            <option value="price-asc">Price: Low High</option>
+            <option value="price-desc">Price: High Low</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+        <div class="shop-grid-wrap">
+          <div class="product-grid" id="shop-grid"></div>
+        </div>
       </div>
     </div>
-    <div class="hero-right">
-      <div class="hero-right-placeholder" id="hero-img-wrap">V</div>
-      <div class="hero-right-text">
-        <span class="hrt-label">The New Drop</span>
-        <div class="hrt-headline">Style that<br>speaks <em>before</em><br>you do.</div>
-        <p class="hrt-sub">Fresh fits. Real looks. Aether Lab.</p>
-      </div>
-      <div class="hero-badge">
-        <div class="hero-badge-label">Items in collection</div>
-        <div class="hero-badge-value" id="hero-count">—</div>
-      </div>
-    </div>
-  </section>
 
-  <div class="marquee">
-    <div class="marquee-inner">
-      <span>Free shipping over $150</span><span>·</span>
-      <span>Sustainable materials</span><span>·</span>
-      <span>Returns within 30 days</span><span>·</span>
-      <span>New arrivals every week</span><span>·</span>
-      <span>Free shipping over $150</span><span>·</span>
-      <span>Sustainable materials</span><span>·</span>
-      <span>Returns within 30 days</span><span>·</span>
-      <span>New arrivals every week</span><span>·</span>
+    <div class="page" id="page-detail">
+      <div class="detail-page" id="detail-content"></div>
     </div>
-  </div>
 
-  <section class="section-wrap">
-    <div class="section-header">
-      <h2 class="section-title">Shop by Category</h2>
-      <a class="section-link" onclick="showPage('shop')">View all </a>
-    </div>
-    <div class="cat-grid" id="cat-grid">
-      <div class="loading">Loading categories</div>
-    </div>
-  </section>
-
-  <section class="section-wrap" style="padding-top:0;">
-    <div class="section-header" style="padding-top:80px">
-      <h2 class="section-title">Featured Pieces</h2>
-      <a class="section-link" onclick="showPage('shop')">All products</a>
-    </div>
-    <div class="product-grid" id="featured-grid">
-      <div class="loading">Loading products</div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand">Aether Lab</div>
-        <p class="footer-tagline">Clothing made with care, cut with intention. We design for real life, not the runway.</p>
+    <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+    <div class="cart-drawer" id="cart-drawer">
+      <div class="cart-head">
+        <h2>Your Bag</h2>
+        <button class="close-cart" onclick="toggleCart()">✖</button>
       </div>
-      <div class="footer-col">
-        <h4>Shop</h4>
-        <ul>
-          <li><a onclick="showPage('shop')">All Products</a></li>
-          <li><a>New Arrivals</a></li>
-          <li><a>Sale</a></li>
-        </ul>
+      <div class="cart-body" id="cart-body">
+        <div class="cart-empty">
+          <span style="font-size: 40px; opacity: 0.2">🛍️</span>
+          <span>Your bag is empty</span>
+        </div>
       </div>
-      <div class="footer-col">
-       
-        <ul>
-          <li><a>Sizing Guide</a></li>
-          <li><a>Shipping Info</a></li>
-          <li><a>Returns</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <ul>
-          <li><a>About Us</a></li>
-          <li><a>Sustainability</a></li>
-          
-        </ul>
+      <div class="cart-foot" id="cart-foot" style="display: none">
+        <div class="cart-subtotal">
+          <span>Subtotal</span>
+          <strong id="cart-total">$0</strong>
+        </div>
+        <button class="checkout-btn">Proceed to Checkout</button>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2025 Aether Lab. All rights reserved.</span>
-      <span>Privacy · Terms</span>
-    </div>
-  </footer>
-</div>
 
+    <div class="toast" id="toast"></div>
 
-<div class="page" id="page-shop">
-  <div class="shop-page">
-    <div class="shop-banner">
-      <h1>All Products</h1>
-      <p id="shop-count">Loading</p>
-    </div>
-    <div class="shop-controls">
-      <div class="filter-tabs" id="filter-tabs">
-        <button class="ftab active" onclick="applyFilter('All', this)">All</button>
-      </div>
-      <select class="sort-sel" onchange="applySort(this.value)">
-        <option value="default">Sort: Featured</option>
-        <option value="price-asc">Price: Low  High</option>
-        <option value="price-desc">Price: High  Low</option>
-        <option value="name">Name A–Z</option>
-      </select>
-    </div>
-    <div class="shop-grid-wrap">
-      <div class="product-grid" id="shop-grid"></div>
-    </div>
-  </div>
-</div>
-
-
-<div class="page" id="page-detail">
-  <div class="detail-page" id="detail-content"></div>
-</div>
-
-
-<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
-<div class="cart-drawer" id="cart-drawer">
-    <div class="cart-head">
-    <h2>Your Bag</h2>
-    <button class="close-cart" onclick="toggleCart()">✖</button>
-  </div>
-    <div class="cart-body" id="cart-body">
-    <div class="cart-empty">
-      <span style="font-size:40px;opacity:.2">🛍️</span>
-      <span>Your bag is empty</span>
-    </div>
-  </div>
-  <div class="cart-foot" id="cart-foot" style="display:none">
-    <div class="cart-subtotal">
-      <span>Subtotal</span>
-      <strong id="cart-total">$0</strong>
-    </div>
-    <button class="checkout-btn">Proceed to Checkout </button>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script src="index.js"></script>
-</body>
+    <script src="index.js"></script>
+  </body>
 </html>

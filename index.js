@@ -1,100 +1,145 @@
-﻿
+﻿const SHEET_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaeB87dNAhoHbuLnfV1IUFgLSaUG33gVYY4TVwH8gPB2HFZJR9zYtX9tt0B0yHyHdTP2jTip8fsH0G/pub?output=csv";
 
-
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaeB87dNAhoHbuLnfV1IUFgLSaUG33gVYY4TVwH8gPB2HFZJR9zYtX9tt0B0yHyHdTP2jTip8fsH0G/pub?output=csv";
-
-
-const WHATSAPP_NUMBER  = "+254 747 028153";
+const WHATSAPP_NUMBER = "+254 747 028153";
 const INSTAGRAM_HANDLE = "@priest._downtown";
 
-
-let PRODUCTS      = [];
-let cart          = [];
-let currentFilter = 'All';
-let currentSort   = 'default';
-let prevPage      = 'shop';
-let qty           = 1;
-
+let PRODUCTS = [];
+let cart = [];
+let currentFilter = "All";
+let currentSort = "default";
+let prevPage = "shop";
+let qty = 1;
 
 function parseCSV(raw) {
-  
-  const text = raw.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const lines = text.trim().split('\n');
+  const text = raw
+    .replace(/^\uFEFF/, "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n");
+  const lines = text.trim().split("\n");
   if (lines.length < 2) return [];
 
-  return lines.slice(1).map((line, i) => {
-    
-    const cols = [];
-    let cur = '', inQ = false;
-    for (let ci = 0; ci < line.length; ci++) {
-      const ch = line[ci];
-      if (ch === '"') {
-        if (inQ && line[ci + 1] === '"') { cur += '"'; ci++; } 
-        else { inQ = !inQ; }
-      } else if (ch === ',' && !inQ) {
-        cols.push(cur.trim());
-        cur = '';
-      } else {
-        cur += ch;
+  return lines
+    .slice(1)
+    .map((line, i) => {
+      const cols = [];
+      let cur = "",
+        inQ = false;
+      for (let ci = 0; ci < line.length; ci++) {
+        const ch = line[ci];
+        if (ch === '"') {
+          if (inQ && line[ci + 1] === '"') {
+            cur += '"';
+            ci++;
+          } else {
+            inQ = !inQ;
+          }
+        } else if (ch === "," && !inQ) {
+          cols.push(cur.trim());
+          cur = "";
+        } else {
+          cur += ch;
+        }
       }
-    }
-    cols.push(cur.trim());
+      cols.push(cur.trim());
 
-    
-    const clean = cols.map(c => c.replace(/^"+|"+$/g, '').trim());
+      const clean = cols.map((c) => c.replace(/^"+|"+$/g, "").trim());
 
-    const img = clean[2] || '';
-    
-    const imageUrl = /^https?:\/\/.+/.test(img) ? img : '';
+      const img = clean[2] || "";
 
-return {
-  id: Number(cols[0]),
-  name: cols[1],
-  price: Number(cols[2]),
-  category: cols[3],
-  image: cols[4]
-};
-  }).filter(p => p.name && p.name !== 'Item' || p.price);
+      const imageUrl = /^https?:\/\/.+/.test(img) ? img : "";
+
+      return {
+        id: Number(cols[0]),
+        name: cols[1],
+        price: Number(cols[2]),
+        category: cols[3],
+        image: cols[4],
+      };
+    })
+    .filter((p) => (p.name && p.name !== "Item") || p.price);
 }
 
-
 async function loadProducts() {
-  if (!SHEET_CSV_URL || SHEET_CSV_URL === 'PASTE_YOUR_CSV_URL_HERE') {
-    useFallback(); return;
+  if (!SHEET_CSV_URL || SHEET_CSV_URL === "PASTE_YOUR_CSV_URL_HERE") {
+    useFallback();
+    return;
   }
   try {
     const res = await fetch(SHEET_CSV_URL);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    if (!res.ok) throw new Error("HTTP " + res.status);
     const text = await res.text();
     PRODUCTS = parseCSV(text);
-    if (!PRODUCTS.length) { useFallback(); return; }
+    if (!PRODUCTS.length) {
+      useFallback();
+      return;
+    }
     initUI();
   } catch (e) {
-    console.warn('Sheet load failed, using fallback data:', e);
+    console.warn("Sheet load failed, using fallback data:", e);
     useFallback();
   }
 }
 
 function useFallback() {
   PRODUCTS = [
-    { id:1, name:'The Linen Shirt',       price:2500, image:'', category:'Tops' },
-    { id:2, name:'Wide-Leg Trouser',      price:3800, image:'', category:'Bottoms' },
-    { id:3, name:'Overshirt Jacket',      price:5200, image:'', category:'Outerwear' },
-    { id:4, name:'Ribbed Tank Top',       price:1500, image:'', category:'Tops' },
-    { id:5, name:'Chino Pant',            price:3200, image:'', category:'Bottoms' },
-    { id:6, name:'Crewneck Sweater',      price:4400, image:'', category:'Tops' },
-    { id:7, name:'Technical Rain Jacket', price:7500, image:'', category:'Outerwear' },
-    { id:8, name:'Linen Shorts',          price:2200, image:'', category:'Bottoms' },
+    {
+      id: 1,
+      name: "The Linen Shirt",
+      price: 2500,
+      image: "",
+      category: "Tops",
+    },
+    {
+      id: 2,
+      name: "Wide-Leg Trouser",
+      price: 3800,
+      image: "",
+      category: "Bottoms",
+    },
+    {
+      id: 3,
+      name: "Overshirt Jacket",
+      price: 5200,
+      image: "",
+      category: "Outerwear",
+    },
+    {
+      id: 4,
+      name: "Ribbed Tank Top",
+      price: 1500,
+      image: "",
+      category: "Tops",
+    },
+    { id: 5, name: "Chino Pant", price: 3200, image: "", category: "Bottoms" },
+    {
+      id: 6,
+      name: "Crewneck Sweater",
+      price: 4400,
+      image: "",
+      category: "Tops",
+    },
+    {
+      id: 7,
+      name: "Technical Rain Jacket",
+      price: 7500,
+      image: "",
+      category: "Outerwear",
+    },
+    {
+      id: 8,
+      name: "Linen Shorts",
+      price: 2200,
+      image: "",
+      category: "Bottoms",
+    },
   ];
   initUI();
 }
 
-
 function initUI() {
-  const countEl = document.getElementById('hero-count');
+  const countEl = document.getElementById("hero-count");
   if (countEl) countEl.textContent = PRODUCTS.length;
-
-  
 
   buildCategories();
   observeCategoryReveal();
@@ -105,44 +150,55 @@ function initUI() {
 }
 
 function observeCategoryReveal() {
-  const cards = document.querySelectorAll('#cat-grid .cat-card');
+  const cards = document.querySelectorAll("#cat-grid .cat-card");
   if (!cards.length || !window.IntersectionObserver) return;
 
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('visible');
-      obs.unobserve(entry.target);
-    });
-  }, {
-    threshold: 0.18,
-    rootMargin: '0px 0px -10% 0px'
-  });
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("visible");
+        obs.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0.18,
+      rootMargin: "0px 0px -10% 0px",
+    },
+  );
 
-  cards.forEach(card => observer.observe(card));
+  cards.forEach((card) => observer.observe(card));
 }
 
-
 function fmt(amount) {
-  return 'Ksh ' + Number(amount).toLocaleString('en-KE');
+  return "Ksh " + Number(amount).toLocaleString("en-KE");
 }
 
 function getSizeOptions(category) {
-  if (category === 'Shoes') {
-    return ['6','7','8','9','10'];
+  if (category === "Shoes") {
+    return ["6", "7", "8", "9", "10"];
   }
-  return ['XS','S','M','L','XL'];
+  return ["XS", "S", "M", "L", "XL"];
 }
 
 function productCardHTML(p) {
-  const samecat  = PRODUCTS.filter(x => x.category === p.category && x.image).slice(0, 4);
-  const gridImgs = samecat.length >= 2
-    ? samecat.map(x => `<img src="${x.image}" alt="${x.name}" loading="lazy">`).join('')
-    : null;
+  const samecat = PRODUCTS.filter(
+    (x) => x.category === p.category && x.image,
+  ).slice(0, 4);
+  const gridImgs =
+    samecat.length >= 2
+      ? samecat
+          .map((x) => `<img src="${x.image}" alt="${x.name}" loading="lazy">`)
+          .join("")
+      : null;
 
-  const singleImg  = p.image ? `<img class="img-single" src="${p.image}" alt="${p.name}" loading="lazy">` : '';
-  const gridLayer  = gridImgs ? `<div class="img-grid">${gridImgs}</div>` : '';
-  const placeholder = !p.image ? `<div class="pcard-placeholder">${p.name[0]}</div>` : '';
+  const singleImg = p.image
+    ? `<img class="img-single" src="${p.image}" alt="${p.name}" loading="lazy">`
+    : "";
+  const gridLayer = gridImgs ? `<div class="img-grid">${gridImgs}</div>` : "";
+  const placeholder = !p.image
+    ? `<div class="pcard-placeholder">${p.name[0]}</div>`
+    : "";
 
   return `
     <div class="pcard" onclick="showDetail(${p.id})">
@@ -162,109 +218,129 @@ function productCardHTML(p) {
     </div>`;
 }
 
-
 function renderFeatured() {
-  const el = document.getElementById('featured-grid');
-  if (el) el.innerHTML = PRODUCTS.slice(0, 4).map(productCardHTML).join('');
+  const el = document.getElementById("featured-grid");
+  if (el) el.innerHTML = PRODUCTS.slice(0, 4).map(productCardHTML).join("");
 }
 
-
 function buildCategories() {
-  const cats  = [...new Set(PRODUCTS.map(p => p.category))];
+  const cats = [...new Set(PRODUCTS.map((p) => p.category))];
   const byCat = {};
-  cats.forEach(c => { byCat[c] = PRODUCTS.filter(p => p.category === c); });
-  const bg = ['#d6cfc2','#c9bfb0','#e2dbd0','#d0c8bc','#c0b3a3','#b8b0a3'];
+  cats.forEach((c) => {
+    byCat[c] = PRODUCTS.filter((p) => p.category === c);
+  });
+  const bg = ["#d6cfc2", "#c9bfb0", "#e2dbd0", "#d0c8bc", "#c0b3a3", "#b8b0a3"];
 
-  const html = cats.map((cat, i) => {
-    // Prefer an image from the same category. If none exist, fall back to
-    // the first item in the category or any product with an image.
-    const sourceItems = byCat[cat]?.filter(item => item.image) || [];
-    const sample = sourceItems.length ? sourceItems[0] : (byCat[cat] && byCat[cat][0]) || PRODUCTS.find(p => p.image);
-    const imgHTML = sample?.image
-      ? `<img src="${sample.image}" alt="${cat}">`
-      : `<div class="cat-card-bg" style="background:${bg[i % bg.length]}">${cat[0]}</div>`;
-    return `
+  const html = cats
+    .map((cat, i) => {
+      // Prefer an image from the same category. If none exist, fall back to
+      // the first item in the category or any product with an image.
+      const sourceItems = byCat[cat]?.filter((item) => item.image) || [];
+      const sample = sourceItems.length
+        ? sourceItems[0]
+        : (byCat[cat] && byCat[cat][0]) || PRODUCTS.find((p) => p.image);
+      const imgHTML = sample?.image
+        ? `<img src="${sample.image}" alt="${cat}">`
+        : `<div class="cat-card-bg" style="background:${bg[i % bg.length]}">${cat[0]}</div>`;
+      return `
       <div class="cat-card" onclick="filterShop('${cat}')">
         ${imgHTML}
         <div class="cat-label">
           <h3>${cat}</h3>
-          <p>${byCat[cat].length} piece${byCat[cat].length !== 1 ? 's' : ''}</p>
+          <p>${byCat[cat].length} piece${byCat[cat].length !== 1 ? "s" : ""}</p>
         </div>
       </div>`;
-  }).join('');
+    })
+    .join("");
 
-  const el = document.getElementById('cat-grid');
-  if (el) el.innerHTML = html || '<p style="padding:40px;color:var(--muted)">No categories found.</p>';
+  const el = document.getElementById("cat-grid");
+  if (el)
+    el.innerHTML =
+      html ||
+      '<p style="padding:40px;color:var(--muted)">No categories found.</p>';
 }
 
-
 function buildFilterTabs() {
-  const cats = [...new Set(PRODUCTS.map(p => p.category))];
-  const tabs = document.getElementById('filter-tabs');
+  const cats = [...new Set(PRODUCTS.map((p) => p.category))];
+  const tabs = document.getElementById("filter-tabs");
   if (!tabs) return;
-  cats.forEach(c => {
-    const btn = document.createElement('button');
-    btn.className  = 'ftab';
+  cats.forEach((c) => {
+    const btn = document.createElement("button");
+    btn.className = "ftab";
     btn.textContent = c;
-    btn.onclick    = () => applyFilter(c, btn);
+    btn.onclick = () => applyFilter(c, btn);
     tabs.appendChild(btn);
   });
 }
 
 function getFiltered() {
-  let p = currentFilter === 'All' ? [...PRODUCTS] : PRODUCTS.filter(x => x.category === currentFilter);
-  if (currentSort === 'price-asc')  p.sort((a, b) => a.price - b.price);
-  if (currentSort === 'price-desc') p.sort((a, b) => b.price - a.price);
-  if (currentSort === 'name')       p.sort((a, b) => a.name.localeCompare(b.name));
+  let p =
+    currentFilter === "All"
+      ? [...PRODUCTS]
+      : PRODUCTS.filter((x) => x.category === currentFilter);
+  if (currentSort === "price-asc") p.sort((a, b) => a.price - b.price);
+  if (currentSort === "price-desc") p.sort((a, b) => b.price - a.price);
+  if (currentSort === "name") p.sort((a, b) => a.name.localeCompare(b.name));
   return p;
 }
 
 function renderShop() {
   const products = getFiltered();
-  const grid = document.getElementById('shop-grid');
-  const count = document.getElementById('shop-count');
-  if (grid)  grid.innerHTML  = products.map(productCardHTML).join('');
-  if (count) count.textContent =
-    `Showing ${products.length} item${products.length !== 1 ? 's' : ''}${currentFilter !== 'All' ? ' in ' + currentFilter : ''}`;
+  const grid = document.getElementById("shop-grid");
+  const count = document.getElementById("shop-count");
+  if (grid) grid.innerHTML = products.map(productCardHTML).join("");
+  if (count)
+    count.textContent = `Showing ${products.length} item${products.length !== 1 ? "s" : ""}${currentFilter !== "All" ? " in " + currentFilter : ""}`;
 }
 
 function applyFilter(cat, btn) {
   currentFilter = cat;
-  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+  document
+    .querySelectorAll(".ftab")
+    .forEach((t) => t.classList.remove("active"));
+  if (btn) btn.classList.add("active");
   renderShop();
 }
 
 function filterShop(cat) {
   currentFilter = cat;
-  showPage('shop');
-  document.querySelectorAll('.ftab').forEach(t => {
-    t.classList.toggle('active', t.textContent === cat);
+  showPage("shop");
+  document.querySelectorAll(".ftab").forEach((t) => {
+    t.classList.toggle("active", t.textContent === cat);
   });
   renderShop();
 }
 
-function applySort(val) { currentSort = val; renderShop(); }
-
+function applySort(val) {
+  currentSort = val;
+  renderShop();
+}
 
 function showDetail(id) {
-  const p = PRODUCTS.find(x => x.id === id);
+  const p = PRODUCTS.find((x) => x.id === id);
   if (!p) return;
 
   const imgHTML = p.image
     ? `<img src="${p.image}" alt="${p.name}">`
     : `<div style="font-family:var(--font-d);font-size:100px;color:rgba(0,0,0,.1)">${p.name[0]}</div>`;
 
-  const thumbsHTML = [p.image, p.image, p.image].map((img, i) => `
-    <div class="thumb ${i === 0 ? 'active' : ''}" onclick="selectThumb(this)">
+  const thumbsHTML = [p.image, p.image, p.image]
+    .map(
+      (img, i) => `
+    <div class="thumb ${i === 0 ? "active" : ""}" onclick="selectThumb(this)">
       ${img ? `<img src="${img}" alt="">` : p.name[0]}
-    </div>`).join('');
+    </div>`,
+    )
+    .join("");
 
-  const sizes = getSizeOptions(p.category).map((s, i) =>
-    `<button class="size-btn ${i === 0 ? 'active' : ''}" onclick="selectSize(this)">${s}</button>`
-  ).join('');
+  const sizes = getSizeOptions(p.category)
+    .map(
+      (s, i) =>
+        `<button class="size-btn ${i === 0 ? "active" : ""}" onclick="selectSize(this)">${s}</button>`,
+    )
+    .join("");
 
-  document.getElementById('detail-content').innerHTML = `
+  document.getElementById("detail-content").innerHTML = `
     <button class="back-btn" onclick="goBack()">← Back</button>
     <div class="detail-layout">
       <div class="detail-gallery">
@@ -272,7 +348,7 @@ function showDetail(id) {
         <div class="main-img" id="main-img">${imgHTML}</div>
       </div>
       <div class="detail-info">
-        <div class="detail-brand">Aether Lab</div>
+        <div class="detail-brand">Priestdowntown</div>
         <h1 class="detail-name">${p.name}</h1>
         <div class="detail-rating">
           <span class="stars">★★★★★</span>
@@ -308,56 +384,67 @@ function showDetail(id) {
       </div>
     </div>`;
 
-  showPage('detail');
+  showPage("detail");
   window.scrollTo(0, 0);
 }
 
 function selectThumb(el) {
-  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
+  document
+    .querySelectorAll(".thumb")
+    .forEach((t) => t.classList.remove("active"));
+  el.classList.add("active");
 }
 
 function selectSize(btn) {
-  document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+  document
+    .querySelectorAll(".size-btn")
+    .forEach((b) => b.classList.remove("active"));
+  btn.classList.add("active");
 }
 
 function changeQty(d) {
   qty = Math.max(1, qty + d);
-  const el = document.getElementById('qty-num');
+  const el = document.getElementById("qty-num");
   if (el) el.textContent = qty;
 }
 
-
 function addToCart(id) {
-  const p = PRODUCTS.find(x => x.id === id);
-  const sizeBtn = document.querySelector('.size-btn.active');
-  const size    = sizeBtn ? sizeBtn.textContent : 'M';
-  const existing = cart.find(i => i.id === id && i.size === size);
+  const p = PRODUCTS.find((x) => x.id === id);
+  const sizeBtn = document.querySelector(".size-btn.active");
+  const size = sizeBtn ? sizeBtn.textContent : "M";
+  const existing = cart.find((i) => i.id === id && i.size === size);
   if (existing) existing.qty += qty;
   else cart.push({ ...p, size, qty });
   qty = 1;
-  const el = document.getElementById('qty-num');
+  const el = document.getElementById("qty-num");
   if (el) el.textContent = 1;
   updateCartUI();
   showToast(`${p.name} added to bag`);
 }
 
-function removeFromCart(idx) { cart.splice(idx, 1); updateCartUI(); }
+function removeFromCart(idx) {
+  cart.splice(idx, 1);
+  updateCartUI();
+}
 
 function updateCartUI() {
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  document.getElementById('cart-count').textContent = cart.reduce((s, i) => s + i.qty, 0);
-  const body = document.getElementById('cart-body');
-  const foot = document.getElementById('cart-foot');
+  document.getElementById("cart-count").textContent = cart.reduce(
+    (s, i) => s + i.qty,
+    0,
+  );
+  const body = document.getElementById("cart-body");
+  const foot = document.getElementById("cart-foot");
 
   if (!cart.length) {
     body.innerHTML = `<div class="cart-empty"><span style="font-size:40px;opacity:.2">🛍️</span><span>Your bag is empty</span></div>`;
-    foot.style.display = 'none';
+    foot.style.display = "none";
   } else {
-    body.innerHTML = cart.map((item, idx) => `
+    body.innerHTML = cart
+      .map(
+        (item, idx) => `
       <div class="cart-item">
-        <div class="cart-item-img">${item.image ? `<img src="${item.image}" alt="">` : ''}</div>
+        <div class="cart-item-img">${item.image ? `<img src="${item.image}" alt="">` : ""}</div>
         <div class="cart-item-info">
           <div class="cart-item-name">${item.name}</div>
           <div class="cart-item-meta">Size: ${item.size} · Qty: ${item.qty}</div>
@@ -366,22 +453,22 @@ function updateCartUI() {
             <button class="remove-btn" onclick="removeFromCart(${idx})">Remove</button>
           </div>
         </div>
-      </div>`).join('');
-    foot.style.display = 'block';
-    document.getElementById('cart-total').textContent = fmt(total);
+      </div>`,
+      )
+      .join("");
+    foot.style.display = "block";
+    document.getElementById("cart-total").textContent = fmt(total);
   }
 }
 
 function toggleCart() {
-  document.getElementById('cart-overlay').classList.toggle('open');
-  document.getElementById('cart-drawer').classList.toggle('open');
+  document.getElementById("cart-overlay").classList.toggle("open");
+  document.getElementById("cart-drawer").classList.toggle("open");
 }
 
-
 function injectCheckoutModal() {
-  
-  const modal = document.createElement('div');
-  modal.id = 'checkout-modal';
+  const modal = document.createElement("div");
+  modal.id = "checkout-modal";
   modal.innerHTML = `
     <div class="co-overlay" onclick="closeCheckout()"></div>
     <div class="co-box">
@@ -404,8 +491,7 @@ function injectCheckoutModal() {
     </div>`;
   document.body.appendChild(modal);
 
-  
-  const style = document.createElement('style');
+  const style = document.createElement("style");
   style.textContent = `
     #checkout-modal { display:none; position:fixed; inset:0; z-index:500; align-items:center; justify-content:center; }
     #checkout-modal.open { display:flex; }
@@ -428,62 +514,64 @@ function injectCheckoutModal() {
   `;
   document.head.appendChild(style);
 
-  
-  const checkoutBtn = document.querySelector('.checkout-btn');
+  const checkoutBtn = document.querySelector(".checkout-btn");
   if (checkoutBtn) checkoutBtn.onclick = openCheckout;
 }
 
 function openCheckout() {
   if (!cart.length) return;
 
-  
-  const lines = cart.map(i => `${i.name} (${i.size} × ${i.qty})`);
+  const lines = cart.map((i) => `${i.name} (${i.size} × ${i.qty})`);
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
 
-  
-  const summaryHTML = cart.map(i => `
+  const summaryHTML =
+    cart
+      .map(
+        (i) => `
     <div class="co-summary-item">
       <span>${i.name} × ${i.qty} (${i.size})</span>
       <span>${fmt(i.price * i.qty)}</span>
-    </div>`).join('') +
+    </div>`,
+      )
+      .join("") +
     `<div class="co-summary-total"><span>Total</span><span>${fmt(total)}</span></div>`;
-  document.getElementById('co-summary').innerHTML = summaryHTML;
+  document.getElementById("co-summary").innerHTML = summaryHTML;
 
-  
   const msg = encodeURIComponent(
-    `Hi Aether Lab! I'd like to order:\n` +
-    lines.map(l => `• ${l}`).join('\n') +
-    `\n\nTotal: ${fmt(total)}`
+    `Hi Priestdowntown! I'd like to order:\n` +
+      lines.map((l) => `• ${l}`).join("\n") +
+      `\n\nTotal: ${fmt(total)}`,
   );
-  document.getElementById('co-wa-link').href =
+  document.getElementById("co-wa-link").href =
     `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
 
-  document.getElementById('checkout-modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.getElementById("checkout-modal").classList.add("open");
+  document.body.style.overflow = "hidden";
 }
 
 function closeCheckout() {
-  document.getElementById('checkout-modal').classList.remove('open');
-  document.body.style.overflow = '';
+  document.getElementById("checkout-modal").classList.remove("open");
+  document.body.style.overflow = "";
 }
 
-
 function showPage(name) {
-  if (name !== 'detail') prevPage = name;
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
+  if (name !== "detail") prevPage = name;
+  document
+    .querySelectorAll(".page")
+    .forEach((p) => p.classList.remove("active"));
+  document.getElementById("page-" + name).classList.add("active");
   window.scrollTo(0, 0);
 }
 
-function goBack() { showPage(prevPage); }
-
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+function goBack() {
+  showPage(prevPage);
 }
 
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2500);
+}
 
 loadProducts();

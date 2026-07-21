@@ -61,7 +61,7 @@ function parseCSV(raw) {
 }
 
 async function loadProducts() {
-  if (!SHEET_CSV_URL || SHEET_CSV_URL === "PASTE_YOUR_CSV_URL_HERE") {
+  if (!SHEET_CSV_URL || SHEET_CSV_URL === "") {
     useFallback();
     return;
   }

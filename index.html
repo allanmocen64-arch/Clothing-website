@@ -16,8 +16,7 @@
       <ul class="nav-links">
         <li><a onclick="showPage('landing')">Home</a></li>
         <li><a onclick="showPage('shop')">Shop</a></li>
-        <li><a>Collections</a></li>
-        <li><a>About</a></li>
+        <li><a onclick="showPage('about')">About</a></li>
       </ul>
       <button class="cart-btn" onclick="toggleCart()">
         Bag <span class="cart-count" id="cart-count">0</span>
@@ -118,7 +117,7 @@
           <div class="footer-col">
             <h4>Company</h4>
             <ul>
-              <li><a>About Us</a></li>
+              <li><a onclick="showPage('about')">About Us</a></li>
               <li><a>Sustainability</a></li>
             </ul>
           </div>
@@ -157,6 +156,57 @@
 
     <div class="page" id="page-detail">
       <div class="detail-page" id="detail-content"></div>
+    </div>
+
+    <div class="page" id="page-about">
+      <div class="about-page">
+        <div class="about-hero">
+          <h1>About Priestdowntown</h1>
+          <p class="about-tagline">
+            Clothing born from a simple idea: dress with purpose.
+          </p>
+        </div>
+
+        <div class="about-content">
+          <section class="about-section">
+            <h2>Our Story</h2>
+            <p>
+              Priestdowntown started 2025 with a vision to create clothing that
+              feels personal. We believe your wardrobe should tell your
+              story—not someone else's. Every piece is thoughtfully designed and
+              crafted with attention to detail.
+            </p>
+            <p>
+              What began as a passion project has grown into a community of
+              people who value quality, intention, and authenticity. We're
+              grateful for everyone who's supported us along the way.
+            </p>
+          </section>
+
+          <section class="about-section">
+            <h2>What We Stand For</h2>
+            <p id="sub">
+              We make clothing for real life. Not for the runway, not for trends
+              that fade in a season. Our designs are timeless, versatile, and
+              made to become your favorites.
+            </p>
+            <p id="sub">
+              Sustainability matters to us. We work with materials we're proud
+              of and partners who share our values. Because good clothing should
+              feel good on you and the world.
+            </p>
+          </section>
+
+          <section class="about-section">
+            <h2>Get In Touch</h2>
+            <p>
+              Have questions? We'd love to hear from you. Reach out on Instagram
+              <strong>@priest._downtown</strong> or WhatsApp us on
+              <strong>+254 747 028153</strong>. We're here to help.
+            </p>
+          </section>
+        </div>
+      </div>
     </div>
 
     <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
